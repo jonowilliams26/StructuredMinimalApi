@@ -24,8 +24,8 @@ public class GetAuthorByIdWithPostsRequestValidator : AbstractValidator<GetAutho
 
 public class GetAuthorByIdWithPosts : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app) =>
-        app.MapGet("/{id}", Handle)
+    public static void Map(IEndpointRouteBuilder app) => app
+        .MapGet("/{id}", Handle)
         .WithRequestValidation<GetAuthorByIdWithPostsRequest>()
         .WithSummary("Gets an author with posts by id")
         .WithDescription("Gets an author with posts by id");

@@ -12,8 +12,8 @@ public class CreateAuthorRequestValidator : AbstractValidator<CreateAuthorReques
 
 public class CreateAuthor : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app) =>
-        app.MapPost("/", Handle)
+    public static void Map(IEndpointRouteBuilder app) => app
+        .MapPost("/", Handle)
         .WithRequestValidation<CreateAuthorRequest>()
         .WithSummary("Creates an author")
         .WithDescription("Creates an author");

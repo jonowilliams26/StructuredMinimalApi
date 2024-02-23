@@ -4,8 +4,8 @@ public record GetAuthorsResponseItem(int Id, string Name);
 
 public class GetAuthors : IEndpoint
 {
-    public static void Map(IEndpointRouteBuilder app) =>
-        app.MapGet("/", Handle)
+    public static void Map(IEndpointRouteBuilder app) => app
+        .MapGet("/", Handle)
         .WithSummary("Gets all authors");
 
     private static async Task<Ok<List<GetAuthorsResponseItem>>> Handle(AppDbContext database, CancellationToken cancellationToken)
