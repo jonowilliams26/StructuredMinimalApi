@@ -1,28 +1,25 @@
 ﻿using Serilog;
-using StructuredMinimalApi.Endpoints;
 
 namespace StructuredMinimalApi;
 
 public static class ConfigureApp
 {
-	public static void Configure(this WebApplication app)
+	public static async Task Configure(this WebApplication app)
 	{
 		app.UseSerilogRequestLogging();
 		app.UseSwagger();
 		app.UseSwaggerUI();
 		app.UseHttpsRedirection();
 		app.MapEndpoints();
+		await app.EnsureDatabaseCreated();
 	}
-
-	private static void MapEndpoints(this WebApplication app)
+	
+	private static async Task EnsureDatabaseCreated(this WebApplication app)
 	{
-		var allEndpointsGroup = app.MapGroup("");
-		allEndpointsGroup.WithOpenApi();
-
-		var endpoints = app.Services.GetServices<IEndpoint>();
-		foreach (var endpoint in endpoints)
-		{
-			endpoint.Map(allEndpointsGroup);
-		}
-	}
+		app.Logger.LogInformation("Ensuring database is created...");
+        using var scope = app.Services.CreateScope();
+        var database = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await database.Database.MigrateAsync();
+		app.Logger.LogInformation("Database created / updated.");
+    }
 }

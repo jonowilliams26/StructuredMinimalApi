@@ -1,15 +1,15 @@
 global using FluentValidation;
+global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.EntityFrameworkCore;
-global using OneOf;
-global using StructuredMinimalApi.DataTypes;
 global using StructuredMinimalApi.Database;
-global using System.Security.Claims;
+global using StructuredMinimalApi.Api;
+global using StructuredMinimalApi.Types;
 using Serilog;
 using StructuredMinimalApi;
 
 Log.Logger = new LoggerConfiguration()
 	.WriteTo.Console()
-	.CreateLogger();
+	.CreateBootstrapLogger();
 
 try
 {
@@ -18,7 +18,7 @@ try
 	Log.Information("Environment: {Environment}", builder.Environment.EnvironmentName);
 	builder.AddServices();
 	var app = builder.Build();
-	app.Configure();
+	await app.Configure();
 	app.Run();
 }
 catch (Exception ex)
