@@ -43,7 +43,8 @@ public static class Endpoints
             .MapEndpoint<CreatePost>()
             .MapEndpoint<UpdatePost>()
             .MapEndpoint<DeletePost>()
-            .MapEndpoint<LikePost>();
+            .MapEndpoint<LikePost>()
+            .MapEndpoint<UnlikePost>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app) where TEndpoint : IEndpoint
