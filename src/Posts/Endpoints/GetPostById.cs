@@ -25,18 +25,15 @@ public class GetPostById : IEndpoint
             (
                 x.Id,
                 x.Content,
-                x.Author.Id,
-                x.Author.Name,
+                x.User.Id,
+                x.User.Name,
                 x.CreatedAtUtc,
                 x.LastUpdatedAtUtc
-            ))                                                                                                  
+            ))
             .SingleOrDefaultAsync(ct);
 
-        if (post is null)
-        {
-            return TypedResults.NotFound();
-        }
-
-        return TypedResults.Ok(post);
+        return post is null
+            ? TypedResults.NotFound()
+            : TypedResults.Ok(post);
     }
 }

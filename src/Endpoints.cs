@@ -1,4 +1,5 @@
 ﻿using Chirper.Authentication.Endpoints;
+using Chirper.Common.Api.Filters;
 using Chirper.Posts.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;

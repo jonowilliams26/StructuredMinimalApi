@@ -1,6 +1,4 @@
-﻿using Chirper.Posts.Endpoints.Filters;
-
-namespace Chirper.Posts.Endpoints;
+﻿namespace Chirper.Posts.Endpoints;
 
 public class UpdatePost : IEndpoint
 {
@@ -8,9 +6,9 @@ public class UpdatePost : IEndpoint
         .MapPut("/", Handle)
         .WithSummary("Updates a post")
         .WithRequestValidation<Request>()
-        .RequiresUserOwnsPost<Request>();
+        .WithEnsureUserOwnsEntity<Post, Request>(x => x.Id);
 
-    public record Request(int Id, string Content) : IRequiresUserOwnsPost;
+    public record Request(int Id, string Content);
     public class RequestValidator : AbstractValidator<Request>
     {
         public RequestValidator()

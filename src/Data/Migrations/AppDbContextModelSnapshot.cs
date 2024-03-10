@@ -56,9 +56,6 @@ namespace Chirper.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -69,9 +66,12 @@ namespace Chirper.Data.Migrations
                     b.Property<DateTime?>("LastUpdatedAtUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -121,13 +121,13 @@ namespace Chirper.Data.Migrations
 
             modelBuilder.Entity("Chirper.Data.Types.Post", b =>
                 {
-                    b.HasOne("Chirper.Data.Types.User", "Author")
+                    b.HasOne("Chirper.Data.Types.User", "User")
                         .WithMany("Posts")
-                        .HasForeignKey("AuthorId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Author");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Chirper.Data.Types.Post", b =>

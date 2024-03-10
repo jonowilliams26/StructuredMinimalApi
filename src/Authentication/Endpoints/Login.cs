@@ -1,4 +1,5 @@
 ﻿using Chirper.Authentication.Services;
+using Chirper.Common.Api.Filters;
 
 namespace Chirper.Authentication.Endpoints;
 

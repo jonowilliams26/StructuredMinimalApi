@@ -1,12 +1,12 @@
 ﻿namespace Chirper.Posts.Endpoints;
 
-public class DeletePost : IEndpoint
+public class UnlikePost : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
-        .MapDelete("/{id}", Handle)
-        .WithSummary("Deletes a post")
+        .MapDelete("/{id}/unlike", Handle)
+        .WithSummary("Unlikes a post")
         .WithRequestValidation<Request>()
-        .WithEnsureUserOwnsEntity<Post, Request>(x => x.Id);
+        .WithEnsureEntityExists<Post, Request>(x => x.Id);
 
     public record Request(int Id);
     public class RequestValidator : AbstractValidator<Request>
@@ -19,8 +19,9 @@ public class DeletePost : IEndpoint
 
     private static async Task<Ok> Handle([AsParameters] Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
     {
-        await db.Posts
-            .Where(x => x.Id == request.Id)
+        var userId = claimsPrincipal.GetUserId();
+        await db.Likes
+            .Where(x => x.PostId == request.Id && x.UserId == userId)
             .ExecuteDeleteAsync(ct);
 
         return TypedResults.Ok();

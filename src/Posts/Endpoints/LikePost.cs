@@ -4,7 +4,9 @@ public class LikePost : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/{id}/like", Handle)
-        .WithSummary("Likes a post");
+        .WithSummary("Likes a post")
+        .WithRequestValidation<Request>()
+        .WithEnsureEntityExists<Post, Request>(x => x.Id);
 
     public record Request(int Id);
     public class RequestValidator : AbstractValidator<Request>
@@ -17,12 +19,6 @@ public class LikePost : IEndpoint
 
     private static async Task<Results<Ok, NotFound>> Handle([AsParameters] Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
     {
-        var doesPostExist = await db.Posts.AnyAsync(x => x.Id == request.Id, ct);
-        if (!doesPostExist)
-        {
-            return TypedResults.NotFound();
-        }
-
         var userId = claimsPrincipal.GetUserId();
         var doesLikeExist = await db.Likes.AnyAsync(x => x.PostId == request.Id && x.UserId == userId, ct);
         if (doesLikeExist)

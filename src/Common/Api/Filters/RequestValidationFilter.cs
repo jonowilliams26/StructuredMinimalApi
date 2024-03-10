@@ -1,14 +1,4 @@
-﻿using FluentValidation;
-namespace Chirper.Common.Api;
-
-public class RequestLoggingFilter(ILogger<RequestLoggingFilter> logger) : IEndpointFilter
-{
-    public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
-    {
-        logger.LogInformation("HTTP {Method} {Path} recieved", context.HttpContext.Request.Method, context.HttpContext.Request.Path);
-        return await next(context);
-    }
-}
+﻿namespace Chirper.Common.Api.Filters;
 
 public class RequestValidationFilter<TRequest>(ILogger<RequestValidationFilter<TRequest>> logger, IValidator<TRequest>? validator = null) : IEndpointFilter
 {
@@ -34,11 +24,4 @@ public class RequestValidationFilter<TRequest>(ILogger<RequestValidationFilter<T
         logger.LogInformation("{Request}: Validation succeeded.", requestName);
         return await next(context);
     }
-}
-
-public static class RouteBuilderExtensions
-{
-    public static RouteHandlerBuilder WithRequestValidation<TRequest>(this RouteHandlerBuilder builder) => builder
-        .AddEndpointFilter<RequestValidationFilter<TRequest>>()
-        .ProducesValidationProblem();
 }

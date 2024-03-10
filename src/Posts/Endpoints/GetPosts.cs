@@ -9,16 +9,16 @@ public class GetPosts : IEndpoint
         .WithSummary("Gets all posts");
 
     public record Response(int Id, string Content, int AuthorId, string Author, DateTime CreateAtUtc, DateTime? LastUpdatedAtUtc);
-    
+
     private static async Task<Ok<Response[]>> Handle(AppDbContext db, CancellationToken ct)
     {
         var posts = await db.Posts
             .Select(x => new Response
             (
-                x.Id, 
-                x.Content, 
-                x.Author.Id,
-                x.Author.Name,
+                x.Id,
+                x.Content,
+                x.User.Id,
+                x.User.Name,
                 x.CreatedAtUtc,
                 x.LastUpdatedAtUtc
             ))
