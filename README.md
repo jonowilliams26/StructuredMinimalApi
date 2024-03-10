@@ -1,5 +1,5 @@
-# Vertical Slice Architecture API Example
-An example API using [Vertical Slice Architecture](https://www.jimmybogard.com/vertical-slice-architecture/)
+# Structured Minimal API
+An example on how to structure a minmal API using [Vertical Slice Architecture](https://www.jimmybogard.com/vertical-slice-architecture/)
 
 ## What is Vertical Slice Architecture?
 Vertical slice architecture is an approach for organising your code into features/vertical slices rather than organising by technical conerns (e.g. Controllers, Models, Services etc).
