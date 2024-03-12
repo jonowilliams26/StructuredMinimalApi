@@ -19,7 +19,12 @@ public class EnsureUserOwnsEntityFilter<TRequest, TEntity>(Func<TRequest, int> i
 
         if (entity is null)
         {
-            return TypedResults.NotFound();
+            return TypedResults.Problem
+            (
+                statusCode: StatusCodes.Status404NotFound,
+                title: "Not Found",
+                detail: $"{typeof(TEntity).Name} with id {id} was not found."
+            );
         }
 
         if (entity.UserId != userId)

@@ -6,7 +6,7 @@ public class UnlikePost : IEndpoint
         .MapDelete("/{id}/unlike", Handle)
         .WithSummary("Unlikes a post")
         .WithRequestValidation<Request>()
-        .WithEnsureEntityExists<Post, Request>(x => x.Id);
+        .EnsureEntityExists<Post>(x => x.Id);
 
     public record Request(int Id);
     public class RequestValidator : AbstractValidator<Request>

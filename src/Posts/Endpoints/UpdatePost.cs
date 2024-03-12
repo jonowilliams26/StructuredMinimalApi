@@ -6,7 +6,7 @@ public class UpdatePost : IEndpoint
         .MapPut("/", Handle)
         .WithSummary("Updates a post")
         .WithRequestValidation<Request>()
-        .WithEnsureUserOwnsEntity<Post, Request>(x => x.Id);
+        .EnsureUserOwnsEntity<Post>(x => x.Id);
 
     public record Request(int Id, string Content);
     public class RequestValidator : AbstractValidator<Request>

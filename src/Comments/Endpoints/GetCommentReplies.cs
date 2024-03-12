@@ -8,7 +8,7 @@ public class GetCommentReplies : IEndpoint
         .MapGet("/{id}/replies", Handle)
         .WithSummary("Gets all replies to a comment")
         .WithRequestValidation<Request>()
-        .WithEnsureEntityExists<Comment, Request>(x => x.Id);
+        .EnsureEntityExists<Comment>(x => x.Id);
 
     public record Request(int Id);
     public record Response(int Id, string Username, string UserDisplayName, string Content, int NumberOfReplies);
