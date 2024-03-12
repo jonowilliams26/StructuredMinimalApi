@@ -35,7 +35,7 @@ public class Signup : IEndpoint
         {
             Username = request.Username,
             Password = request.Password,
-            Name = request.Name
+            DisplayName = request.Name
         };
         await db.Users.AddAsync(user, ct);
         await db.SaveChangesAsync(ct);

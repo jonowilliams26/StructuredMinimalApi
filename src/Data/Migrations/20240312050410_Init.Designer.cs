@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirper.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240312024648_Init")]
+    [Migration("20240312050410_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -128,7 +128,7 @@ namespace Chirper.Data.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -158,11 +158,13 @@ namespace Chirper.Data.Migrations
                         .HasForeignKey("ReplyToCommentId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Chirper.Data.Types.User", null)
+                    b.HasOne("Chirper.Data.Types.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Chirper.Data.Types.Like", b =>

@@ -12,10 +12,4 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
     }
-
-    public async Task<User> GetUser(ClaimsPrincipal claimsPrinciple, CancellationToken ct)
-    {
-        var id = claimsPrinciple.GetUserId();
-        return await Users.FindAsync([id], ct) ?? throw new InvalidOperationException("User not found");
-    }
 }

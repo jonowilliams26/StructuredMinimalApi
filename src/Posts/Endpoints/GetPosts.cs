@@ -12,8 +12,9 @@ public class GetPosts : IEndpoint
     (
         int Id,
         string Content,
-        int AuthorId,
-        string Author,
+        int UserId,
+        string Username,
+        string UserDisplayName,
         DateTime CreateAtUtc,
         DateTime? LastUpdatedAtUtc,
         int NumberOfLikes,
@@ -27,8 +28,9 @@ public class GetPosts : IEndpoint
             (
                 x.Id,
                 x.Content,
-                x.User.Id,
-                x.User.Name,
+                x.UserId,
+                x.User.Username,
+                x.User.DisplayName,
                 x.CreatedAtUtc,
                 x.LastUpdatedAtUtc,
                 x.Likes.Count,

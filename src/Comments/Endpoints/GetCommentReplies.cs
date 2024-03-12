@@ -11,7 +11,7 @@ public class GetCommentReplies : IEndpoint
         .EnsureEntityExists<Comment>(x => x.Id);
 
     public record Request(int Id);
-    public record Response(int Id, string Username, string UserDisplayName, string Content, int NumberOfReplies);
+    public record Response(int Id, int UserId, string Username, string UserDisplayName, string Content, int NumberOfReplies);
     public class RequestValidator : AbstractValidator<Request>
     {
         public RequestValidator()
@@ -27,8 +27,9 @@ public class GetCommentReplies : IEndpoint
             .Select(x => new Response
             (
                 x.Id,
+                x.UserId,
                 x.User.Username,
-                x.User.Name,
+                x.User.DisplayName,
                 x.Content,
                 x.Replies.Count
             ))

@@ -21,13 +21,10 @@ public class CreatePost : IEndpoint
 
     private static async Task<Results<Ok<Response>, ValidationError>> Handle(Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
     {
-        var user = await db.GetUser(claimsPrincipal, ct);
-
         var post = new Post
         {
             Content = request.Content,
-            UserId = user.Id,
-            User = user,
+            UserId = claimsPrincipal.GetUserId()
         };
 
         await db.Posts.AddAsync(post, ct);

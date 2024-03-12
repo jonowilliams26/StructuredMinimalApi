@@ -8,7 +8,7 @@ public class GetPostById : IEndpoint
         .WithRequestValidation<Request>();
 
     public record Request(int Id);
-    public record Response(int Id, string Content, int AuthorId, string Author, DateTime CreateAtUtc, DateTime? LastUpdatedAtUtc);
+    public record Response(int Id, string Content, int UserId, string Username, string UserDisplayName, DateTime CreateAtUtc, DateTime? LastUpdatedAtUtc);
     public class RequestValidator : AbstractValidator<Request>
     {
         public RequestValidator()
@@ -25,8 +25,9 @@ public class GetPostById : IEndpoint
             (
                 x.Id,
                 x.Content,
-                x.User.Id,
-                x.User.Name,
+                x.UserId,
+                x.User.Username,
+                x.User.DisplayName,
                 x.CreatedAtUtc,
                 x.LastUpdatedAtUtc
             ))
