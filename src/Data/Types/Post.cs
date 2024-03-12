@@ -9,4 +9,5 @@ public class Post : IOwnedEntity
     public DateTime CreatedAtUtc { get; private init; } = DateTime.UtcNow;
     public DateTime? LastUpdatedAtUtc { get; set; }
     public List<Like> Likes { get; set; } = [];
+    public List<Comment> Comments { get; set; } = [];
 }

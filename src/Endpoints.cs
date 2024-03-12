@@ -1,4 +1,5 @@
 ﻿using Chirper.Authentication.Endpoints;
+using Chirper.Comments.Endpoints;
 using Chirper.Common.Api.Filters;
 using Chirper.Posts.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -45,6 +46,10 @@ public static class Endpoints
             .MapEndpoint<DeletePost>()
             .MapEndpoint<LikePost>()
             .MapEndpoint<UnlikePost>();
+
+        endpoints.MapGroup("/comments")
+            .WithTags("Comments")
+            .MapEndpoint<CreateComment>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app) where TEndpoint : IEndpoint

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirper.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240310051737_Init")]
+    [Migration("20240312024648_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -24,6 +24,44 @@ namespace Chirper.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Chirper.Data.Types.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReplyToCommentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("ReplyToCommentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
 
             modelBuilder.Entity("Chirper.Data.Types.Like", b =>
                 {
@@ -107,6 +145,26 @@ namespace Chirper.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Chirper.Data.Types.Comment", b =>
+                {
+                    b.HasOne("Chirper.Data.Types.Post", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Chirper.Data.Types.Comment", null)
+                        .WithMany("Replies")
+                        .HasForeignKey("ReplyToCommentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Chirper.Data.Types.User", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Chirper.Data.Types.Like", b =>
                 {
                     b.HasOne("Chirper.Data.Types.Post", null)
@@ -133,13 +191,22 @@ namespace Chirper.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Chirper.Data.Types.Comment", b =>
+                {
+                    b.Navigation("Replies");
+                });
+
             modelBuilder.Entity("Chirper.Data.Types.Post", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("Chirper.Data.Types.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("LikedPosts");
 
                     b.Navigation("Posts");

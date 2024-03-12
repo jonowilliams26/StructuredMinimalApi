@@ -9,4 +9,5 @@ public class User
     public DateTime CreatedAtUtc { get; private init; } = DateTime.UtcNow;
     public List<Post> Posts { get; set; } = [];
     public List<Like> LikedPosts { get; set; } = [];
+    public List<Comment> Comments { get; set; } = [];
 }

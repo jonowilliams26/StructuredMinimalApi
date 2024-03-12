@@ -5,19 +5,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<User> Users { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Like> Likes { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Like>()
-            .HasOne<Post>()
-            .WithMany(p => p.Likes)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<Like>()
-            .HasOne<User>()
-            .WithMany(u => u.LikedPosts)
-            .OnDelete(DeleteBehavior.NoAction);
-
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
     }
 
