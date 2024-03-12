@@ -8,7 +8,17 @@ public class GetPosts : IEndpoint
         .MapGet("/", Handle)
         .WithSummary("Gets all posts");
 
-    public record Response(int Id, string Content, int AuthorId, string Author, DateTime CreateAtUtc, DateTime? LastUpdatedAtUtc);
+    public record Response
+    (
+        int Id,
+        string Content,
+        int AuthorId,
+        string Author,
+        DateTime CreateAtUtc,
+        DateTime? LastUpdatedAtUtc,
+        int NumberOfLikes,
+        int NumberOfComments
+    );
 
     private static async Task<Ok<Response[]>> Handle(AppDbContext db, CancellationToken ct)
     {
@@ -20,7 +30,9 @@ public class GetPosts : IEndpoint
                 x.User.Id,
                 x.User.Name,
                 x.CreatedAtUtc,
-                x.LastUpdatedAtUtc
+                x.LastUpdatedAtUtc,
+                x.Likes.Count,
+                x.Comments.Count
             ))
             .ToArrayAsync(ct);
 
