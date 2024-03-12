@@ -6,7 +6,8 @@ public class CreateComment : IEndpoint
         .MapPost("/", Handle)
         .WithSummary("Creates a new comment")
         .WithRequestValidation<Request>()
-        .WithEnsureEntityExists<Post, Request>(x => x.PostId);
+        .WithEnsureEntityExists<Post, Request>(x => x.PostId)
+        .WithEnsureEntityExists<Comment, Request>(x => x.ReplyToCommentId);
 
     public record Request(int PostId, string Content, int? ReplyToCommentId);
     public record Response(int Id);
@@ -22,7 +23,7 @@ public class CreateComment : IEndpoint
         }
     }
 
-    private static async Task<Response> Handle(Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
+    private static async Task<Ok<Response>> Handle(Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
     {
         var comment = new Comment
         {
@@ -33,6 +34,7 @@ public class CreateComment : IEndpoint
         };
         await db.Comments.AddAsync(comment, ct);
         await db.SaveChangesAsync(ct);
-        return new Response(comment.Id);
+        var response = new Response(comment.Id);
+        return TypedResults.Ok(response);
     }
 }

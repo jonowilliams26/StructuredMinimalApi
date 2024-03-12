@@ -49,7 +49,8 @@ public static class Endpoints
 
         endpoints.MapGroup("/comments")
             .WithTags("Comments")
-            .MapEndpoint<CreateComment>();
+            .MapEndpoint<CreateComment>()
+            .MapEndpoint<GetCommentReplies>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app) where TEndpoint : IEndpoint
