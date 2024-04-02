@@ -19,7 +19,7 @@ public class CreatePost : IEndpoint
         }
     }
 
-    private static async Task<Results<Ok<Response>, ValidationError>> Handle(Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
+    private static async Task<Ok<Response>> Handle(Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
     {
         var post = new Post
         {
