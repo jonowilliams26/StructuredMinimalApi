@@ -7,7 +7,7 @@ public class Signup : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/signup", Handle)
         .WithSummary("Creates a new user account")
-        .WithRequestValidation<Request>();
+        .WithRequest<Request>();
 
     public record Request(string Username, string Password, string Name);
     public record Response(string Token);

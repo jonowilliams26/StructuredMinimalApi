@@ -5,7 +5,7 @@ public class CreatePost : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/", Handle)
         .WithSummary("Creates a new post")
-        .WithRequestValidation<Request>();
+        .WithRequest<Request>();
 
     public record Request(string Content);
     public record Response(int Id);

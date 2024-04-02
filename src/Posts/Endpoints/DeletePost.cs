@@ -5,7 +5,7 @@ public class DeletePost : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapDelete("/{id}", Handle)
         .WithSummary("Deletes a post")
-        .WithRequestValidation<Request>()
+        .WithRequest<Request>()
         .EnsureUserOwnsEntity<Post>(x => x.Id);
 
     public record Request(int Id);

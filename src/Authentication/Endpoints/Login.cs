@@ -8,7 +8,7 @@ public class Login : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/login", Handle)
         .WithSummary("Logs in a user")
-        .WithRequestValidation<Request>();
+        .WithRequest<Request>();
 
     public record Request(string Username, string Password);
     public record Response(string Token);

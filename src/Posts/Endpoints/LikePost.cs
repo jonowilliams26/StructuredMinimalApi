@@ -5,7 +5,7 @@ public class LikePost : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/{id}/like", Handle)
         .WithSummary("Likes a post")
-        .WithRequestValidation<Request>()
+        .WithRequest<Request>()
         .EnsureEntityExists<Post>(x => x.Id);
 
     public record Request(int Id);

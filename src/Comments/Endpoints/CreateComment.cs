@@ -5,7 +5,7 @@ public class CreateComment : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/", Handle)
         .WithSummary("Creates a new comment")
-        .WithRequestValidation<Request>()
+        .WithRequest<Request>()
         .EnsureEntityExists<Post>(x => x.PostId)
         .EnsureEntityExists<Comment>(x => x.ReplyToCommentId);
 

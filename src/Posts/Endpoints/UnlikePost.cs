@@ -5,7 +5,7 @@ public class UnlikePost : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapDelete("/{id}/unlike", Handle)
         .WithSummary("Unlikes a post")
-        .WithRequestValidation<Request>()
+        .WithRequest<Request>()
         .EnsureEntityExists<Post>(x => x.Id);
 
     public record Request(int Id);
