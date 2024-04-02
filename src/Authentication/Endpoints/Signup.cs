@@ -7,7 +7,7 @@ public class Signup : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/signup", Handle)
         .WithSummary("Creates a new user account")
-        .WithRequest<Request>();
+        .WithRequestValidation<Request>();
 
     public record Request(string Username, string Password, string Name);
     public record Response(string Token);
@@ -21,14 +21,14 @@ public class Signup : IEndpoint
         }
     }
 
-    private static async Task<Results<Ok<Response>, ValidationError>> Handle(Request request, AppDbContext db, Jwt jwt, CancellationToken ct)
+    private static async Task<Results<Ok<Response>, ValidationProblem>> Handle(Request request, AppDbContext db, Jwt jwt, CancellationToken ct)
     {
         var isUsernameTaken = await db.Users
             .AnyAsync(x => x.Username == request.Username, ct);
 
         if (isUsernameTaken)
         {
-            return new ValidationError(nameof(request.Username), "Username is already taken");
+            return TypedResults.Extensions.ValidationProblem(nameof(request.Username), "Username is already taken");
         }
 
         var user = new User

@@ -5,7 +5,7 @@ public class GetPostById : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapGet("/{id}", Handle)
         .WithSummary("Gets a post by id")
-        .WithRequest<Request>();
+        .WithRequestValidation<Request>();
 
     public record Request(int Id);
     public record Response(int Id, string Content, int UserId, string Username, string UserDisplayName, DateTime CreateAtUtc, DateTime? LastUpdatedAtUtc);

@@ -1,5 +1,4 @@
 ﻿using Chirper.Authentication.Services;
-using Chirper.Common.Api.Filters;
 
 namespace Chirper.Authentication.Endpoints;
 
@@ -8,7 +7,7 @@ public class Login : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/login", Handle)
         .WithSummary("Logs in a user")
-        .WithRequest<Request>();
+        .WithRequestValidation<Request>();
 
     public record Request(string Username, string Password);
     public record Response(string Token);

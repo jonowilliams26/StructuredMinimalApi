@@ -44,7 +44,7 @@ public static class EndpointFilterExtensions
     /// <typeparam name="TRequest"></typeparam>
     /// <param name="builder"></param>
     /// <returns>A <see cref="RouteHandlerRequestValidationBuilder{TRequest}"/> to build additional request validation</returns>
-    public static RouteHandlerRequestValidationBuilder<TRequest> WithRequest<TRequest>(this RouteHandlerBuilder builder)
+    public static RouteHandlerRequestValidationBuilder<TRequest> WithRequestValidation<TRequest>(this RouteHandlerBuilder builder)
     {
         builder
             .AddEndpointFilter<RequestValidationFilter<TRequest>>()

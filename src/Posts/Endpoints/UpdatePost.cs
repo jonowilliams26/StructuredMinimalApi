@@ -5,7 +5,7 @@ public class UpdatePost : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPut("/", Handle)
         .WithSummary("Updates a post")
-        .WithRequest<Request>()
+        .WithRequestValidation<Request>()
         .EnsureUserOwnsEntity<Post>(x => x.Id);
 
     public record Request(int Id, string Content);
