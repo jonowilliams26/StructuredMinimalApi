@@ -17,13 +17,16 @@ public class UnlikePost : IEndpoint
         }
     }
 
-    private static async Task<Ok> Handle([AsParameters] Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
+    private static async Task<Results<Ok, NotFound>> Handle([AsParameters] Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
     {
         var userId = claimsPrincipal.GetUserId();
-        await db.Likes
+
+        var rowsDeleted = await db.Likes
             .Where(x => x.PostId == request.Id && x.UserId == userId)
             .ExecuteDeleteAsync(ct);
 
-        return TypedResults.Ok();
+        return rowsDeleted == 0
+            ? TypedResults.NotFound()
+            : TypedResults.Ok();
     }
 }
