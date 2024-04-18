@@ -1,4 +1,4 @@
-﻿namespace Microsoft.AspNetCore.Http;
+﻿namespace Chirper.Common.Api.Extensions;
 
 public static class TypedResultExtensions
 {

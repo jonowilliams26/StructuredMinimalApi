@@ -1,4 +1,5 @@
 global using Chirper.Common.Api;
+global using Chirper.Common.Api.Extensions;
 global using Chirper.Data;
 global using Chirper.Data.Types;
 global using FluentValidation;

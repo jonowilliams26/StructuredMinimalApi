@@ -6,8 +6,8 @@ public class CreateComment : IEndpoint
         .MapPost("/", Handle)
         .WithSummary("Creates a new comment")
         .WithRequestValidation<Request>()
-        .EnsureEntityExists<Post>(x => x.PostId)
-        .EnsureEntityExists<Comment>(x => x.ReplyToCommentId);
+        .EnsureEntityExists<Post, Request>(x => x.PostId)
+        .EnsureEntityExists<Comment, Request>(x => x.ReplyToCommentId);
 
     public record Request(int PostId, string Content, int? ReplyToCommentId);
     public record Response(int Id);
