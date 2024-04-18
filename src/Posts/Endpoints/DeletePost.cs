@@ -6,7 +6,7 @@ public class DeletePost : IEndpoint
         .MapDelete("/{id}", Handle)
         .WithSummary("Deletes a post")
         .WithRequestValidation<Request>()
-        .EnsureUserOwnsEntity<Post, Request>(x => x.Id);
+        .WithEnsureUserOwnsEntity<Post, Request>(x => x.Id);
 
     public record Request(int Id);
     public class RequestValidator : AbstractValidator<Request>

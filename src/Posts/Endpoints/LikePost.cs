@@ -6,7 +6,7 @@ public class LikePost : IEndpoint
         .MapPost("/{id}/like", Handle)
         .WithSummary("Likes a post")
         .WithRequestValidation<Request>()
-        .EnsureEntityExists<Post, Request>(x => x.Id);
+        .WithEnsureEntityExists<Post, Request>(x => x.Id);
 
     public record Request(int Id);
     public class RequestValidator : AbstractValidator<Request>

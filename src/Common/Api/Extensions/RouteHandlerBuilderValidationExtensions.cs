@@ -25,7 +25,7 @@ public static class RouteHandlerBuilderValidationExtensions
     /// <param name="builder"></param>
     /// <param name="idSelector">A function which selects the <c>Id</c> property from the <typeparamref name="TRequest"/></param>
     /// <returns>A <see cref="RouteHandlerBuilder"/> that can be used to futher customize the endpoint.</returns>
-    public static RouteHandlerBuilder EnsureEntityExists<TEntity, TRequest>(this RouteHandlerBuilder builder, Func<TRequest, int?> idSelector) where TEntity : class, IEntity
+    public static RouteHandlerBuilder WithEnsureEntityExists<TEntity, TRequest>(this RouteHandlerBuilder builder, Func<TRequest, int?> idSelector) where TEntity : class, IEntity
     {
         return builder
             .AddEndpointFilter(new EnsureEntityExistsFilter<TRequest, TEntity>(idSelector))
@@ -40,7 +40,7 @@ public static class RouteHandlerBuilderValidationExtensions
     /// <param name="builder"></param>
     /// <param name="idSelector">A function which selects the <c>Id</c> property from the <typeparamref name="TRequest"/></param>
     /// <returns>A <see cref="RouteHandlerBuilder"/> that can be used to futher customize the endpoint.</returns>
-    public static RouteHandlerBuilder EnsureUserOwnsEntity<TEntity, TRequest>(this RouteHandlerBuilder builder, Func<TRequest, int> idSelector) where TEntity : class, IOwnedEntity
+    public static RouteHandlerBuilder WithEnsureUserOwnsEntity<TEntity, TRequest>(this RouteHandlerBuilder builder, Func<TRequest, int> idSelector) where TEntity : class, IOwnedEntity
     {
         return builder
             .AddEndpointFilter(new EnsureUserOwnsEntityFilter<TRequest, TEntity>(idSelector))
