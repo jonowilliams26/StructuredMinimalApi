@@ -1,6 +1,6 @@
 ﻿namespace Chirper.Data.Types;
 
-public class User
+public class User : IEntity
 {
     public int Id { get; private init; }
     public required string Username { get; set; }

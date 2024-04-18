@@ -1,6 +1,6 @@
 ﻿namespace Chirper.Data.Types;
 
-public class Like
+public class Like : IOwnedEntity
 {
     public int Id { get; private set; }
     public required int PostId { get; init; }
