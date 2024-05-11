@@ -16,7 +16,11 @@ public class User : IEntity
 
 public class Follow
 {
-    public int UserId { get; set; }
-    public int FollowingUserId { get; set; }
+    public int FollowerUserId { get; set; }
+    public User FollowerUser { get; set; } = null!;
+
+    public int FollowedUserId { get; set; }
+    public User FollowedUser { get; set; } = null!;
+
     public DateTime CreatedAtUtc { get; private init; } = DateTime.UtcNow;
 }

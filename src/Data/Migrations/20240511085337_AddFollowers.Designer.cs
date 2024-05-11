@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirper.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240511073956_AddFollows")]
-    partial class AddFollows
+    [Migration("20240511085337_AddFollowers")]
+    partial class AddFollowers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,18 +65,18 @@ namespace Chirper.Data.Migrations
 
             modelBuilder.Entity("Chirper.Data.Types.Follow", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("FollowerUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FollowingUserId")
+                    b.Property<int>("FollowedUserId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("UserId", "FollowingUserId");
+                    b.HasKey("FollowerUserId", "FollowedUserId");
 
-                    b.HasIndex("FollowingUserId");
+                    b.HasIndex("FollowedUserId");
 
                     b.ToTable("Follows");
                 });
@@ -187,17 +187,21 @@ namespace Chirper.Data.Migrations
 
             modelBuilder.Entity("Chirper.Data.Types.Follow", b =>
                 {
-                    b.HasOne("Chirper.Data.Types.User", null)
+                    b.HasOne("Chirper.Data.Types.User", "FollowedUser")
                         .WithMany("Followers")
-                        .HasForeignKey("FollowingUserId")
+                        .HasForeignKey("FollowedUserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Chirper.Data.Types.User", null)
+                    b.HasOne("Chirper.Data.Types.User", "FollowerUser")
                         .WithMany("Following")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowerUserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("FollowedUser");
+
+                    b.Navigation("FollowerUser");
                 });
 
             modelBuilder.Entity("Chirper.Data.Types.Like", b =>

@@ -10,52 +10,95 @@ namespace Chirper;
 
 public static class Endpoints
 {
+    private static readonly OpenApiSecurityScheme securityScheme = new()
+    {
+        Type = SecuritySchemeType.Http,
+        Name = JwtBearerDefaults.AuthenticationScheme,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        Reference = new()
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = JwtBearerDefaults.AuthenticationScheme
+        }
+    };
+
     public static void MapEndpoints(this WebApplication app)
     {
-        var securityScheme = new OpenApiSecurityScheme()
-        {
-            Type = SecuritySchemeType.Http,
-            Name = JwtBearerDefaults.AuthenticationScheme,
-            Scheme = JwtBearerDefaults.AuthenticationScheme,
-            Reference = new()
-            {
-                Type = ReferenceType.SecurityScheme,
-                Id = JwtBearerDefaults.AuthenticationScheme
-            }
-        };
-
         var endpoints = app.MapGroup("")
             .AddEndpointFilter<RequestLoggingFilter>()
-            .RequireAuthorization()
-            .WithOpenApi(x => new(x)
-            {
-                Security = [new() { [securityScheme] = [] }],
-            });
+            .WithOpenApi();
 
-        endpoints.MapGroup("/auth")
-             .WithTags("Authentication")
-             .AllowAnonymous()
-             .MapEndpoint<Signup>()
-             .MapEndpoint<Login>();
+        endpoints.MapAuthenticationEndpoints();
+        endpoints.MapPostEndpoints();
+        endpoints.MapCommentEndpoints();
+        endpoints.MapUserEndpoints();
+    }
 
-        endpoints.MapGroup("/posts")
-            .WithTags("Posts")
+    private static void MapAuthenticationEndpoints(this IEndpointRouteBuilder app)
+    {
+        var endpoints = app.MapGroup("/auth")
+            .WithTags("Authentication");
+            
+        endpoints.MapPublicGroup()
+            .MapEndpoint<Signup>()
+            .MapEndpoint<Login>();
+    }
+
+    private static void MapPostEndpoints(this IEndpointRouteBuilder app)
+    {
+        var endpoints = app.MapGroup("/posts")
+            .WithTags("Posts");
+
+        endpoints.MapPublicGroup()
             .MapEndpoint<GetPosts>()
-            .MapEndpoint<GetPostById>()
+            .MapEndpoint<GetPostById>();
+
+        endpoints.MapAuthorizedGroup()
             .MapEndpoint<CreatePost>()
             .MapEndpoint<UpdatePost>()
             .MapEndpoint<DeletePost>()
             .MapEndpoint<LikePost>()
             .MapEndpoint<UnlikePost>();
+    }
 
-        endpoints.MapGroup("/comments")
-            .WithTags("Comments")
-            .MapEndpoint<CreateComment>()
+    private static void MapCommentEndpoints(this IEndpointRouteBuilder app)
+    {
+        var endpoints = app.MapGroup("/comments")
+            .WithTags("Comments");
+
+        endpoints.MapPublicGroup()
             .MapEndpoint<GetCommentReplies>();
 
-        endpoints.MapGroup("/users")
-            .WithTags("Users")
+        endpoints.MapAuthorizedGroup()
+            .MapEndpoint<CreateComment>();
+    }
+
+    private static void MapUserEndpoints(this IEndpointRouteBuilder app)
+    {
+        var endpoints = app.MapGroup("/users")
+            .WithTags("Users");
+
+        endpoints.MapPublicGroup()
+            .MapEndpoint<GetUserFollowers>();
+
+        endpoints.MapAuthorizedGroup()
             .MapEndpoint<FollowUser>();
+    }
+
+    private static RouteGroupBuilder MapPublicGroup(this IEndpointRouteBuilder app, string? prefix = null)
+    {
+        return app.MapGroup(prefix ?? string.Empty)
+            .AllowAnonymous();
+    }
+
+    private static RouteGroupBuilder MapAuthorizedGroup(this IEndpointRouteBuilder app, string? prefix = null)
+    {
+        return app.MapGroup(prefix ?? string.Empty)
+            .RequireAuthorization()
+            .WithOpenApi(x => new(x)
+            {
+                Security = [new() { [securityScheme] = [] }],
+            });
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app) where TEndpoint : IEndpoint

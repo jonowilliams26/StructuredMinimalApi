@@ -20,14 +20,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     private static void ConfigureUsersTable(ModelBuilder modelBuilder)
     {
         var builder = modelBuilder.Entity<User>();
-        builder.HasMany(x => x.Following)
-            .WithOne()
-            .HasForeignKey(x => x.UserId)
+        
+        builder.HasMany(x => x.Followers)
+            .WithOne(x => x.FollowedUser)
+            .HasForeignKey(x => x.FollowedUserId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.HasMany(x => x.Followers)
-            .WithOne()
-            .HasForeignKey(x => x.FollowingUserId)
+        builder.HasMany(x => x.Following)
+            .WithOne(x => x.FollowerUser)
+            .HasForeignKey(x => x.FollowerUserId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 
@@ -59,6 +60,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     private static void ConfigureFollowsTable(ModelBuilder modelBuilder)
     {
         var builder = modelBuilder.Entity<Follow>();
-        builder.HasKey(x => new { x.UserId, x.FollowingUserId });
+        builder.HasKey(x => new { x.FollowerUserId, x.FollowedUserId });
     }
 }

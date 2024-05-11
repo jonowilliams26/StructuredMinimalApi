@@ -6,7 +6,8 @@ public class FollowUser : IEndpoint
     public static void Map(IEndpointRouteBuilder app) => app
         .MapPost("/{id}/follow", Handle)
         .WithSummary("Follows a user")
-        .WithRequestValidation<Request>();
+        .WithRequestValidation<Request>()
+        .WithEnsureEntityExists<User, Request>(x => x.Id);
 
     public record Request(int Id);
     public class RequestValidator : AbstractValidator<Request>
@@ -31,8 +32,8 @@ public class FollowUser : IEndpoint
         }
 
         var isAlreadyFollowing = await db.Follows.AnyAsync(x => 
-            x.UserId == userId && 
-            x.FollowingUserId == request.Id, 
+            x.FollowerUserId == userId && 
+            x.FollowedUserId == request.Id,
             ct
         );
 
@@ -47,8 +48,8 @@ public class FollowUser : IEndpoint
 
         var follow = new Follow
         {
-            UserId = userId,
-            FollowingUserId = request.Id
+            FollowerUserId = userId,
+            FollowedUserId = request.Id
         };
 
         // TODO: Send a notification to the user being followed
