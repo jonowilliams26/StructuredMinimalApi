@@ -2,6 +2,7 @@
 using Chirper.Comments.Endpoints;
 using Chirper.Common.Api.Filters;
 using Chirper.Posts.Endpoints;
+using Chirper.Users.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
@@ -51,6 +52,10 @@ public static class Endpoints
             .WithTags("Comments")
             .MapEndpoint<CreateComment>()
             .MapEndpoint<GetCommentReplies>();
+
+        endpoints.MapGroup("/users")
+            .WithTags("Users")
+            .MapEndpoint<FollowUser>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app) where TEndpoint : IEndpoint

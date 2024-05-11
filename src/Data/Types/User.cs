@@ -10,4 +10,13 @@ public class User : IEntity
     public List<Post> Posts { get; set; } = [];
     public List<Like> LikedPosts { get; set; } = [];
     public List<Comment> Comments { get; set; } = [];
+    public List<Follow> Following { get; set; } = [];
+    public List<Follow> Followers { get; set; } = [];
+}
+
+public class Follow
+{
+    public int UserId { get; set; }
+    public int FollowingUserId { get; set; }
+    public DateTime CreatedAtUtc { get; private init; } = DateTime.UtcNow;
 }
