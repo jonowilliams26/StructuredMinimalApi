@@ -1,6 +1,6 @@
 ﻿namespace Chirper.Common.Api.Filters;
 
-public class EnsureEntityExistsFilter<TRequest, TEntity>(Func<TRequest, int?> idSelector) : IEndpointFilter
+public class EnsureEntityExistsFilter<TRequest, TEntity>(AppDbContext db, Func<TRequest, int?> idSelector) : IEndpointFilter
     where TEntity : class, IEntity
 {
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
@@ -14,7 +14,6 @@ public class EnsureEntityExistsFilter<TRequest, TEntity>(Func<TRequest, int?> id
             return await next(context);
         }
 
-        var db = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
         var exists = await db
             .Set<TEntity>()
             .AnyAsync(x => x.Id == id, ct);

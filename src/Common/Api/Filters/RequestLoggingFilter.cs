@@ -4,7 +4,7 @@ public class RequestLoggingFilter(ILogger<RequestLoggingFilter> logger) : IEndpo
 {
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        logger.LogInformation("HTTP {Method} {Path} recieved", context.HttpContext.Request.Method, context.HttpContext.Request.Path);
+        logger.LogInformation("HTTP {Method} {Path} received", context.HttpContext.Request.Method, context.HttpContext.Request.Path);
         return await next(context);
     }
 }

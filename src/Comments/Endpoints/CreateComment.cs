@@ -17,9 +17,7 @@ public class CreateComment : IEndpoint
         {
             RuleFor(x => x.PostId).GreaterThan(0);
             RuleFor(x => x.Content).NotEmpty();
-            RuleFor(x => x.ReplyToCommentId)
-                .GreaterThan(0)
-                .When(x => x.ReplyToCommentId.HasValue);
+            RuleFor(x => x.ReplyToCommentId).GreaterThan(0);
         }
     }
 

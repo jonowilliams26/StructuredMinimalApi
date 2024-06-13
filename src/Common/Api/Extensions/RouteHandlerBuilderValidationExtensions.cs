@@ -28,7 +28,12 @@ public static class RouteHandlerBuilderValidationExtensions
     public static RouteHandlerBuilder WithEnsureEntityExists<TEntity, TRequest>(this RouteHandlerBuilder builder, Func<TRequest, int?> idSelector) where TEntity : class, IEntity
     {
         return builder
-            .AddEndpointFilter(new EnsureEntityExistsFilter<TRequest, TEntity>(idSelector))
+            .AddEndpointFilterFactory((endpointFilterFactoryContext, next) => async context =>
+            {
+                var db = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
+                var filter = new EnsureEntityExistsFilter<TRequest, TEntity>(db, idSelector);
+                return await filter.InvokeAsync(context, next);
+            })
             .ProducesProblem(StatusCodes.Status404NotFound);
     }
 
@@ -43,7 +48,12 @@ public static class RouteHandlerBuilderValidationExtensions
     public static RouteHandlerBuilder WithEnsureUserOwnsEntity<TEntity, TRequest>(this RouteHandlerBuilder builder, Func<TRequest, int> idSelector) where TEntity : class, IOwnedEntity
     {
         return builder
-            .AddEndpointFilter(new EnsureUserOwnsEntityFilter<TRequest, TEntity>(idSelector))
+            .AddEndpointFilterFactory((endpointFilterFactoryContext, next) => async context =>
+            {
+                var db = context.HttpContext.RequestServices.GetRequiredService<AppDbContext>();
+                var filter = new EnsureUserOwnsEntityFilter<TRequest, TEntity>(db, idSelector);
+                return await filter.InvokeAsync(context, next);
+            })
             .ProducesProblem(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status403Forbidden);
     }

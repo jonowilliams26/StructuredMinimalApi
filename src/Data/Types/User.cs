@@ -7,20 +7,20 @@ public class User : IEntity
     public required string Password { get; set; }
     public required string DisplayName { get; set; }
     public DateTime CreatedAtUtc { get; private init; } = DateTime.UtcNow;
-    public List<Post> Posts { get; set; } = [];
-    public List<Like> LikedPosts { get; set; } = [];
-    public List<Comment> Comments { get; set; } = [];
-    public List<Follow> Following { get; set; } = [];
-    public List<Follow> Followers { get; set; } = [];
+    public List<Post> Posts { get; init; } = [];
+    public List<Like> LikedPosts { get; init; } = [];
+    public List<Comment> Comments { get; init; } = [];
+    public List<Follow> Following { get; init; } = [];
+    public List<Follow> Followers { get; init; } = [];
 }
 
 public class Follow
 {
-    public int FollowerUserId { get; set; }
-    public User FollowerUser { get; set; } = null!;
+    public required int FollowerUserId { get; init; }
+    public User FollowerUser { get; init; } = null!;
 
-    public int FollowedUserId { get; set; }
-    public User FollowedUser { get; set; } = null!;
+    public required int FollowedUserId { get; init; }
+    public User FollowedUser { get; init; } = null!;
 
     public DateTime CreatedAtUtc { get; private init; } = DateTime.UtcNow;
 }
