@@ -1,6 +1,9 @@
 # Structured Minimal API
 An example on how to structure a minmal API using [Vertical Slice Architecture](https://www.jimmybogard.com/vertical-slice-architecture/)
 
+## Video Walkthrough
+Prefer watching videos rather than reading the code? Check [this video out](https://www.youtube.com/watch?v=ZA2X1gaAhJk), it's a walkthrough of the solution and explains some concepts / reasoning
+
 ## What is Vertical Slice Architecture?
 Vertical slice architecture is an approach for organising your code into features/vertical slices rather than organising by technical conerns (e.g. Controllers, Models, Services etc).
 Each slice will contain all the code which fullfills a feature or use case inside the application.
