@@ -21,14 +21,14 @@ public class Signup : IEndpoint
         }
     }
 
-    private static async Task<Results<Ok<Response>, ValidationProblem>> Handle(Request request, AppDbContext db, Jwt jwt, CancellationToken ct)
+    private static async Task<Results<Ok<Response>, ValidationError>> Handle(Request request, AppDbContext db, Jwt jwt, CancellationToken ct)
     {
         var isUsernameTaken = await db.Users
             .AnyAsync(x => x.Username == request.Username, ct);
 
         if (isUsernameTaken)
         {
-            return TypedResults.Extensions.ValidationProblem(nameof(request.Username), "Username is already taken");
+            return new ValidationError("Username is already taken");
         }
 
         var user = new User

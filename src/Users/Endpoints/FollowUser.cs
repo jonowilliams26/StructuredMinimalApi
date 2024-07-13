@@ -1,5 +1,4 @@
-﻿
-namespace Chirper.Users.Endpoints;
+﻿namespace Chirper.Users.Endpoints;
 
 public class FollowUser : IEndpoint
 {
@@ -18,17 +17,13 @@ public class FollowUser : IEndpoint
         }
     }
 
-    private static async Task<Results<Ok, ValidationProblem>> Handle([AsParameters] Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
+    private static async Task<Results<Ok, ValidationError>> Handle([AsParameters] Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
     {
         var userId = claimsPrincipal.GetUserId();
 
         if (userId == request.Id)
         {
-            return TypedResults.Extensions.ValidationProblem
-            (
-                property: nameof(request.Id),
-                message: "You cannot follow yourself."
-            );
+            return new ValidationError("You cannot follow yourself.");
         }
 
         var isAlreadyFollowing = await db.Follows.AnyAsync(x => 
@@ -39,11 +34,7 @@ public class FollowUser : IEndpoint
 
         if (isAlreadyFollowing)
         {
-            return TypedResults.Extensions.ValidationProblem
-            (
-                property: nameof(request.Id),
-                message: "You are already following this user."
-            );
+            return new ValidationError("You are already following this user.");
         }
 
         var follow = new Follow
