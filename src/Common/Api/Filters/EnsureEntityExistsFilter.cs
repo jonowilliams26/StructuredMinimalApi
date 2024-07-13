@@ -18,16 +18,8 @@ public class EnsureEntityExistsFilter<TRequest, TEntity>(AppDbContext db, Func<T
             .Set<TEntity>()
             .AnyAsync(x => x.Id == id, ct);
 
-        if (!exists)
-        {
-            return TypedResults.Problem
-            (
-                statusCode: StatusCodes.Status404NotFound,
-                title: "Not Found",
-                detail: $"{typeof(TEntity).Name} with id {id} was not found."
-            );
-        }
-
-        return await next(context);
+        return exists
+            ? await next(context)
+            : new NotFoundProblem($"{typeof(TEntity).Name} with id {id} was not found.");
     }
 }

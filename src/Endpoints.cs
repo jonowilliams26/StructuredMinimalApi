@@ -82,7 +82,8 @@ public static class Endpoints
             .MapEndpoint<GetUserFollowers>();
 
         endpoints.MapAuthorizedGroup()
-            .MapEndpoint<FollowUser>();
+            .MapEndpoint<FollowUser>()
+            .MapEndpoint<UnfollowUser>();
     }
 
     private static RouteGroupBuilder MapPublicGroup(this IEndpointRouteBuilder app, string? prefix = null)

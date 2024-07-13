@@ -18,12 +18,7 @@ public class EnsureUserOwnsEntityFilter<TRequest, TEntity>(AppDbContext db, Func
 
         return entity switch
         {
-            null => TypedResults.Problem
-            (
-                statusCode: StatusCodes.Status404NotFound,
-                title: "Not Found",
-                detail: $"{typeof(TEntity).Name} with id {id} was not found."
-            ),
+            null => new NotFoundProblem($"{typeof(TEntity).Name} with id {id} was not found."),
             _ when entity.UserId != userId => TypedResults.Forbid(),
             _ => await next(context)
         };

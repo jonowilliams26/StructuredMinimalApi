@@ -6,6 +6,7 @@ global using FluentValidation;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.EntityFrameworkCore;
 global using System.Security.Claims;
+global using Chirper.Common.Api.Results;
 using Chirper;
 using Serilog;
 
