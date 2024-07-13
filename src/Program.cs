@@ -1,12 +1,13 @@
 global using Chirper.Common.Api;
 global using Chirper.Common.Api.Extensions;
+global using Chirper.Common.Api.Requests;
+global using Chirper.Common.Api.Results;
 global using Chirper.Data;
 global using Chirper.Data.Types;
 global using FluentValidation;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Microsoft.EntityFrameworkCore;
 global using System.Security.Claims;
-global using Chirper.Common.Api.Results;
 using Chirper;
 using Serilog;
 
