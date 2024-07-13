@@ -20,18 +20,18 @@ public class LikePost : IEndpoint
     private static async Task<Ok> Handle([AsParameters] Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
     {
         var userId = claimsPrincipal.GetUserId();
-        var doesLikeExist = await db.Likes.AnyAsync(x => x.PostId == request.Id && x.UserId == userId, ct);
+        var doesLikeExist = await db.PostLikes.AnyAsync(x => x.PostId == request.Id && x.UserId == userId, ct);
         if (doesLikeExist)
         {
             return TypedResults.Ok();
         }
 
-        var like = new Like
+        var like = new PostLike
         {
             PostId = request.Id,
             UserId = userId
         };
-        await db.Likes.AddAsync(like, ct);
+        await db.PostLikes.AddAsync(like, ct);
         await db.SaveChangesAsync(ct);
         return TypedResults.Ok();
     }

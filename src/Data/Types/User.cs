@@ -8,8 +8,9 @@ public class User : IEntity
     public required string DisplayName { get; set; }
     public DateTime CreatedAtUtc { get; private init; } = DateTime.UtcNow;
     public List<Post> Posts { get; init; } = [];
-    public List<Like> LikedPosts { get; init; } = [];
+    public List<PostLike> LikedPosts { get; init; } = [];
     public List<Comment> Comments { get; init; } = [];
+    public List<CommentLike> LikedComments { get; init; } = [];
     public List<Follow> Following { get; init; } = [];
     public List<Follow> Followers { get; init; } = [];
 }

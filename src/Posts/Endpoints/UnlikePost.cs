@@ -21,7 +21,7 @@ public class UnlikePost : IEndpoint
     {
         var userId = claimsPrincipal.GetUserId();
 
-        var rowsDeleted = await db.Likes
+        var rowsDeleted = await db.PostLikes
             .Where(x => x.PostId == request.Id && x.UserId == userId)
             .ExecuteDeleteAsync(ct);
 

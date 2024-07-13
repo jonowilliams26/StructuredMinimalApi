@@ -1,7 +1,7 @@
 ﻿namespace Chirper.Common.Api.Filters;
 
 public class EnsureUserOwnsEntityFilter<TRequest, TEntity>(AppDbContext db, Func<TRequest, int> idSelector) : IEndpointFilter
-    where TEntity : class, IOwnedEntity
+    where TEntity : class, IEntity, IOwnedEntity
 {
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
