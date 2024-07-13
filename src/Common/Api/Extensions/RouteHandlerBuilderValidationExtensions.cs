@@ -45,7 +45,7 @@ public static class RouteHandlerBuilderValidationExtensions
     /// <param name="builder"></param>
     /// <param name="idSelector">A function which selects the <c>Id</c> property from the <typeparamref name="TRequest"/></param>
     /// <returns>A <see cref="RouteHandlerBuilder"/> that can be used to futher customize the endpoint.</returns>
-    public static RouteHandlerBuilder WithEnsureUserOwnsEntity<TEntity, TRequest>(this RouteHandlerBuilder builder, Func<TRequest, int> idSelector) where TEntity : class, IOwnedEntity
+    public static RouteHandlerBuilder WithEnsureUserOwnsEntity<TEntity, TRequest>(this RouteHandlerBuilder builder, Func<TRequest, int> idSelector) where TEntity : class, IEntity, IOwnedEntity
     {
         return builder
             .AddEndpointFilterFactory((endpointFilterFactoryContext, next) => async context =>

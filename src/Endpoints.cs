@@ -70,7 +70,8 @@ public static class Endpoints
             .MapEndpoint<GetCommentReplies>();
 
         endpoints.MapAuthorizedGroup()
-            .MapEndpoint<CreateComment>();
+            .MapEndpoint<CreateComment>()
+            .MapEndpoint<LikeComment>();
     }
 
     private static void MapUserEndpoints(this IEndpointRouteBuilder app)
