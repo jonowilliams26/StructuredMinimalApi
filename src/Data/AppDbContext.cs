@@ -1,4 +1,6 @@
-﻿namespace Chirper.Data;
+﻿using Chirper.Common.Api.Requests;
+
+namespace Chirper.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {

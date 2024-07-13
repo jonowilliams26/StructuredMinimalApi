@@ -1,13 +1,14 @@
 ﻿namespace Chirper.Posts.Endpoints;
 
-// TODO: Add pagination
-
 public class GetPosts : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
         .MapGet("/", Handle)
-        .WithSummary("Gets all posts");
+        .WithSummary("Gets all posts")
+        .WithRequestValidation<Request>();
 
+    public record Request(int? Page, int? PageSize) : IPagedRequest;
+    public class RequestValidator : PagedRequestValidator<Request>;
     public record Response
     (
         int Id,
@@ -21,9 +22,9 @@ public class GetPosts : IEndpoint
         int NumberOfComments
     );
 
-    private static async Task<Ok<Response[]>> Handle(AppDbContext db, CancellationToken ct)
+    private static async Task<PagedList<Response>> Handle([AsParameters] Request request, AppDbContext database, CancellationToken cancellationToken)
     {
-        var posts = await db.Posts
+        var posts = await database.Posts
             .Select(x => new Response
             (
                 x.Id,
@@ -36,8 +37,8 @@ public class GetPosts : IEndpoint
                 x.Likes.Count,
                 x.Comments.Count
             ))
-            .ToArrayAsync(ct);
+            .ToPagedListAsync(request, cancellationToken);
 
-        return TypedResults.Ok(posts);
+        return posts;
     }
 }
