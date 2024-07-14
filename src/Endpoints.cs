@@ -51,7 +51,8 @@ public static class Endpoints
 
         endpoints.MapPublicGroup()
             .MapEndpoint<GetPosts>()
-            .MapEndpoint<GetPostById>();
+            .MapEndpoint<GetPostById>()
+            .MapEndpoint<GetPostComments>();
 
         endpoints.MapAuthorizedGroup()
             .MapEndpoint<CreatePost>()
@@ -81,7 +82,12 @@ public static class Endpoints
             .WithTags("Users");
 
         endpoints.MapPublicGroup()
-            .MapEndpoint<GetUserFollowers>();
+            .MapEndpoint<GetUserPosts>()
+            .MapEndpoint<GetUserComments>()
+            .MapEndpoint<GetUserFollowers>()
+            .MapEndpoint<GetUserFollowing>()
+            .MapEndpoint<GetUserLikedPosts>()
+            .MapEndpoint<GetUserLikedComments>();
 
         endpoints.MapAuthorizedGroup()
             .MapEndpoint<FollowUser>()
