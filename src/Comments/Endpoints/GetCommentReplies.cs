@@ -18,10 +18,11 @@ public class GetCommentReplies : IEndpoint
         }
     }
 
-    private static async Task<PagedList<Response>> Handle([AsParameters] Request request, AppDbContext db, CancellationToken ct)
+    private static async Task<PagedList<Response>> Handle([AsParameters] Request request, AppDbContext database, CancellationToken cancellationToken)
     {
-        var replies = await db.Comments
+        var replies = await database.Comments
             .Where(x => x.ReplyToCommentId == request.Id)
+            .OrderByDescending(x => x.CreatedAtUtc)
             .Select(x => new Response
             (
                 x.Id,
@@ -31,7 +32,7 @@ public class GetCommentReplies : IEndpoint
                 x.Content,
                 x.Replies.Count
             ))
-            .ToPagedListAsync(request, ct);
+            .ToPagedListAsync(request, cancellationToken);
 
         return replies;
     }
