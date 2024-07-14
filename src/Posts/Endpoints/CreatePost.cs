@@ -7,28 +7,29 @@ public class CreatePost : IEndpoint
         .WithSummary("Creates a new post")
         .WithRequestValidation<Request>();
 
-    public record Request(string Content);
+    public record Request(string Title, string? Content);
     public record Response(int Id);
     public class RequestValidator : AbstractValidator<Request>
     {
         public RequestValidator()
         {
-            RuleFor(x => x.Content)
+            RuleFor(x => x.Title)
                 .NotEmpty()
-                .MaximumLength(250);
+                .MaximumLength(100);
         }
     }
 
-    private static async Task<Ok<Response>> Handle(Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
+    private static async Task<Ok<Response>> Handle(Request request, AppDbContext database, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
     {
         var post = new Post
         {
+            Title = request.Title,
             Content = request.Content,
             UserId = claimsPrincipal.GetUserId()
         };
 
-        await db.Posts.AddAsync(post, ct);
-        await db.SaveChangesAsync(ct);
+        await database.Posts.AddAsync(post, cancellationToken);
+        await database.SaveChangesAsync(cancellationToken);
         var response = new Response(post.Id);
         return TypedResults.Ok(response);
     }

@@ -17,10 +17,10 @@ public class LikePost : IEndpoint
         }
     }
 
-    private static async Task<Ok> Handle([AsParameters] Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
+    private static async Task<Ok> Handle([AsParameters] Request request, AppDbContext database, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
     {
         var userId = claimsPrincipal.GetUserId();
-        var doesLikeExist = await db.PostLikes.AnyAsync(x => x.PostId == request.Id && x.UserId == userId, ct);
+        var doesLikeExist = await database.PostLikes.AnyAsync(x => x.PostId == request.Id && x.UserId == userId, cancellationToken);
         if (doesLikeExist)
         {
             return TypedResults.Ok();
@@ -31,8 +31,8 @@ public class LikePost : IEndpoint
             PostId = request.Id,
             UserId = userId
         };
-        await db.PostLikes.AddAsync(like, ct);
-        await db.SaveChangesAsync(ct);
+        await database.PostLikes.AddAsync(like, cancellationToken);
+        await database.SaveChangesAsync(cancellationToken);
         return TypedResults.Ok();
     }
 }

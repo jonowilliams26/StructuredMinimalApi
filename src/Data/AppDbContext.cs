@@ -1,6 +1,4 @@
-﻿using Chirper.Common.Api.Requests;
-
-namespace Chirper.Data;
+﻿namespace Chirper.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
@@ -60,6 +58,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     private static void ConfigurePostsTable(ModelBuilder modelBuilder)
     {
         var builder = modelBuilder.Entity<Post>();
+
+        builder.Property(x => x.Title)
+            .HasMaxLength(100);
 
         builder.HasMany(x => x.Likes)
             .WithOne(x => x.Post)

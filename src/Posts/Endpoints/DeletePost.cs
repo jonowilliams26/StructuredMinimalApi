@@ -17,11 +17,11 @@ public class DeletePost : IEndpoint
         }
     }
 
-    private static async Task<Results<Ok, NotFound>> Handle([AsParameters] Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
+    private static async Task<Results<Ok, NotFound>> Handle([AsParameters] Request request, AppDbContext database, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
     {
-        var rowsDeleted = await db.Posts
+        var rowsDeleted = await database.Posts
             .Where(x => x.Id == request.Id)
-            .ExecuteDeleteAsync(ct);
+            .ExecuteDeleteAsync(cancellationToken);
 
         return rowsDeleted == 1
             ? TypedResults.Ok()

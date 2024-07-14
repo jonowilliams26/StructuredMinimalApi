@@ -17,7 +17,7 @@ public class UnfollowUser : IEndpoint
         }
     }
 
-    public static async Task<Results<Ok, ValidationError>> Handle([AsParameters] Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
+    public static async Task<Results<Ok, ValidationError>> Handle([AsParameters] Request request, AppDbContext database, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
     {
         var userId = claimsPrincipal.GetUserId();
         if (userId == request.Id)
@@ -25,9 +25,9 @@ public class UnfollowUser : IEndpoint
             return new ValidationError("You cannot unfollow yourself.");
         }
 
-        var rowsDeleted = await db.Follows
+        var rowsDeleted = await database.Follows
             .Where(x => x.FollowerUserId == userId && x.FollowedUserId == request.Id)
-            .ExecuteDeleteAsync(ct);
+            .ExecuteDeleteAsync(cancellationToken);
 
         if (rowsDeleted == 0)
         {

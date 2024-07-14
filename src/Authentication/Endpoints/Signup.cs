@@ -21,10 +21,10 @@ public class Signup : IEndpoint
         }
     }
 
-    private static async Task<Results<Ok<Response>, ValidationError>> Handle(Request request, AppDbContext db, Jwt jwt, CancellationToken ct)
+    private static async Task<Results<Ok<Response>, ValidationError>> Handle(Request request, AppDbContext database, Jwt jwt, CancellationToken cancellationToken)
     {
-        var isUsernameTaken = await db.Users
-            .AnyAsync(x => x.Username == request.Username, ct);
+        var isUsernameTaken = await database.Users
+            .AnyAsync(x => x.Username == request.Username, cancellationToken);
 
         if (isUsernameTaken)
         {
@@ -37,8 +37,8 @@ public class Signup : IEndpoint
             Password = request.Password,
             DisplayName = request.Name
         };
-        await db.Users.AddAsync(user, ct);
-        await db.SaveChangesAsync(ct);
+        await database.Users.AddAsync(user, cancellationToken);
+        await database.SaveChangesAsync(cancellationToken);
 
         var token = jwt.GenerateToken(user);
         var response = new Response(token);

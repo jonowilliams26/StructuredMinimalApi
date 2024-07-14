@@ -19,7 +19,7 @@ public class GetUserLikedPosts : IEndpoint
     public record Response(
         int Id,
         int UserId,
-        string Content,
+        string? Content,
         DateTime CreatedAtUtc,
         DateTime? UpdatedAtUtc,
         int LikesCount,
@@ -38,7 +38,7 @@ public class GetUserLikedPosts : IEndpoint
                 x.Post.UserId,
                 x.Post.Content,
                 x.Post.CreatedAtUtc,
-                x.Post.LastUpdatedAtUtc,
+                x.Post.UpdatedAtUtc,
                 x.Post.Likes.Count,
                 x.Post.Comments.Count,
                 x.CreatedAtUtc
