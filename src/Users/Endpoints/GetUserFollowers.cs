@@ -1,5 +1,4 @@
-﻿
-namespace Chirper.Users.Endpoints;
+﻿namespace Chirper.Users.Endpoints;
 
 public class GetUserFollowers : IEndpoint
 {
@@ -9,8 +8,8 @@ public class GetUserFollowers : IEndpoint
         .WithRequestValidation<Request>()
         .WithEnsureEntityExists<User, Request>(x => x.Id);
 
-    public record Request(int Id);
-    public class RequestValidator : AbstractValidator<Request>
+    public record Request(int Id, int? Page, int? PageSize) : IPagedRequest;
+    public class RequestValidator : PagedRequestValidator<Request>
     {
         public RequestValidator()
         {
@@ -20,17 +19,18 @@ public class GetUserFollowers : IEndpoint
 
     public record Response(int Id, string Username, string Name, DateTime CreatedAtUtc);
 
-    private static async Task<Response[]> Handle([AsParameters] Request request, AppDbContext db, CancellationToken ct)
+    private static async Task<PagedList<Response>> Handle([AsParameters] Request request, AppDbContext db, CancellationToken ct)
     {
         return await db.Follows
             .Where(x => x.FollowedUserId == request.Id)
+            .OrderByDescending(x => x.CreatedAtUtc)
             .Select(x => new Response
             (
                 x.FollowerUser.Id,
                 x.FollowerUser.Username,
                 x.FollowerUser.DisplayName,
-                x.FollowerUser.CreatedAtUtc
+                x.CreatedAtUtc
             ))
-            .ToArrayAsync(ct);
+            .ToPagedListAsync(request, ct);
     }
 }
