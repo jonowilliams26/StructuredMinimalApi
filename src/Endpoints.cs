@@ -81,6 +81,7 @@ public static class Endpoints
             .WithTags("Users");
 
         endpoints.MapPublicGroup()
+            .MapEndpoint<GetUserPosts>()
             .MapEndpoint<GetUserFollowers>()
             .MapEndpoint<GetUserFollowing>()
             .MapEndpoint<GetUserLikedPosts>()
