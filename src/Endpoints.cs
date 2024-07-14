@@ -51,7 +51,8 @@ public static class Endpoints
 
         endpoints.MapPublicGroup()
             .MapEndpoint<GetPosts>()
-            .MapEndpoint<GetPostById>();
+            .MapEndpoint<GetPostById>()
+            .MapEndpoint<GetPostComments>();
 
         endpoints.MapAuthorizedGroup()
             .MapEndpoint<CreatePost>()
