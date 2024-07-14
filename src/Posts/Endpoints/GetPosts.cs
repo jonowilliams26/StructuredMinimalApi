@@ -25,6 +25,7 @@ public class GetPosts : IEndpoint
     private static async Task<PagedList<Response>> Handle([AsParameters] Request request, AppDbContext database, CancellationToken cancellationToken)
     {
         var posts = await database.Posts
+            .OrderByDescending(x => x.CreatedAtUtc)
             .Select(x => new Response
             (
                 x.Id,

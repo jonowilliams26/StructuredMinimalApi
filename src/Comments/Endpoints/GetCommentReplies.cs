@@ -1,7 +1,5 @@
 ﻿namespace Chirper.Comments.Endpoints;
 
-// TODO: Add Pagination
-
 public class GetCommentReplies : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app) => app
@@ -10,9 +8,9 @@ public class GetCommentReplies : IEndpoint
         .WithRequestValidation<Request>()
         .WithEnsureEntityExists<Comment, Request>(x => x.Id);
 
-    public record Request(int Id);
+    public record Request(int Id, int? Page, int? PageSize) : IPagedRequest;
     public record Response(int Id, int UserId, string Username, string UserDisplayName, string Content, int NumberOfReplies);
-    public class RequestValidator : AbstractValidator<Request>
+    public class RequestValidator : PagedRequestValidator<Request>
     {
         public RequestValidator()
         {
@@ -20,10 +18,11 @@ public class GetCommentReplies : IEndpoint
         }
     }
 
-    private static async Task<Ok<Response[]>> Handle([AsParameters] Request request, AppDbContext db, CancellationToken ct)
+    private static async Task<PagedList<Response>> Handle([AsParameters] Request request, AppDbContext database, CancellationToken cancellationToken)
     {
-        var replies = await db.Comments
+        var replies = await database.Comments
             .Where(x => x.ReplyToCommentId == request.Id)
+            .OrderByDescending(x => x.CreatedAtUtc)
             .Select(x => new Response
             (
                 x.Id,
@@ -33,8 +32,8 @@ public class GetCommentReplies : IEndpoint
                 x.Content,
                 x.Replies.Count
             ))
-            .ToArrayAsync(ct);
+            .ToPagedListAsync(request, cancellationToken);
 
-        return TypedResults.Ok(replies);
+        return replies;
     }
 }
