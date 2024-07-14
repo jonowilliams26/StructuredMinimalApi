@@ -8,7 +8,6 @@ public class GetPostById : IEndpoint
         .WithRequestValidation<Request>();
 
     public record Request(int Id);
-    public record Response(int Id, string Content, int UserId, string Username, string UserDisplayName, DateTime CreateAtUtc, DateTime? LastUpdatedAtUtc);
     public class RequestValidator : AbstractValidator<Request>
     {
         public RequestValidator()
@@ -16,22 +15,37 @@ public class GetPostById : IEndpoint
             RuleFor(x => x.Id).GreaterThan(0);
         }
     }
+    public record Response(
+        int Id,
+        string Title,
+        string? Content,
+        int UserId,
+        string Username,
+        string UserDisplayName,
+        DateTime CreateAtUtc,
+        DateTime? UpdatedAtUtc,
+        int LikesCount,
+        int CommentsCount
+    );
 
-    private static async Task<Results<Ok<Response>, NotFound>> Handle([AsParameters] Request request, AppDbContext db, CancellationToken ct)
+    private static async Task<Results<Ok<Response>, NotFound>> Handle([AsParameters] Request request, AppDbContext database, CancellationToken cancellationToken)
     {
-        var post = await db.Posts
+        var post = await database.Posts
             .Where(x => x.Id == request.Id)
             .Select(x => new Response
             (
                 x.Id,
+                x.Title,
                 x.Content,
                 x.UserId,
                 x.User.Username,
                 x.User.DisplayName,
                 x.CreatedAtUtc,
-                x.LastUpdatedAtUtc
+                x.UpdatedAtUtc,
+                x.Likes.Count,
+                x.Comments.Count
             ))
-            .SingleOrDefaultAsync(ct);
+            .SingleOrDefaultAsync(cancellationToken);
 
         return post is null
             ? TypedResults.NotFound()

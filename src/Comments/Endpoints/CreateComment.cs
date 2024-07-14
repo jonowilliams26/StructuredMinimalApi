@@ -21,7 +21,7 @@ public class CreateComment : IEndpoint
         }
     }
 
-    private static async Task<Ok<Response>> Handle(Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
+    private static async Task<Ok<Response>> Handle(Request request, AppDbContext database, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
     {
         var comment = new Comment
         {
@@ -30,8 +30,8 @@ public class CreateComment : IEndpoint
             Content = request.Content,
             ReplyToCommentId = request.ReplyToCommentId
         };
-        await db.Comments.AddAsync(comment, ct);
-        await db.SaveChangesAsync(ct);
+        await database.Comments.AddAsync(comment, cancellationToken);
+        await database.SaveChangesAsync(cancellationToken);
         var response = new Response(comment.Id);
         return TypedResults.Ok(response);
     }

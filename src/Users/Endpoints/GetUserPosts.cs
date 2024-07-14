@@ -16,7 +16,7 @@ public class GetUserPosts : IEndpoint
             RuleFor(x => x.Id).GreaterThan(0);
         }
     }
-    public record Response(int Id, string Content, DateTime CreatedAtUtc, DateTime? UpdatedAtUtc, int LikesCount, int CommentsCount);
+    public record Response(int Id, string Title, string? Content, DateTime CreatedAtUtc, DateTime? UpdatedAtUtc, int LikesCount, int CommentsCount);
 
     public static async Task<PagedList<Response>> Handle([AsParameters] Request request, AppDbContext database, CancellationToken cancellationToken)
     {
@@ -26,9 +26,10 @@ public class GetUserPosts : IEndpoint
             .Select(x => new Response
             (
                 x.Id,
+                x.Title,
                 x.Content,
                 x.CreatedAtUtc,
-                x.LastUpdatedAtUtc,
+                x.UpdatedAtUtc,
                 x.Likes.Count,
                 x.Comments.Count
             ))

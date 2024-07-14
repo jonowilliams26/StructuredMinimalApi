@@ -19,9 +19,9 @@ public class GetUserFollowers : IEndpoint
 
     public record Response(int Id, string Username, string Name, DateTime CreatedAtUtc);
 
-    private static async Task<PagedList<Response>> Handle([AsParameters] Request request, AppDbContext db, CancellationToken ct)
+    private static async Task<PagedList<Response>> Handle([AsParameters] Request request, AppDbContext database, CancellationToken cancellationToken)
     {
-        return await db.Follows
+        return await database.Follows
             .Where(x => x.FollowedUserId == request.Id)
             .OrderByDescending(x => x.CreatedAtUtc)
             .Select(x => new Response
@@ -31,6 +31,6 @@ public class GetUserFollowers : IEndpoint
                 x.FollowerUser.DisplayName,
                 x.CreatedAtUtc
             ))
-            .ToPagedListAsync(request, ct);
+            .ToPagedListAsync(request, cancellationToken);
     }
 }

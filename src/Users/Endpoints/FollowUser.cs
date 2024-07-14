@@ -17,7 +17,7 @@ public class FollowUser : IEndpoint
         }
     }
 
-    private static async Task<Results<Ok, ValidationError>> Handle([AsParameters] Request request, AppDbContext db, ClaimsPrincipal claimsPrincipal, CancellationToken ct)
+    private static async Task<Results<Ok, ValidationError>> Handle([AsParameters] Request request, AppDbContext database, ClaimsPrincipal claimsPrincipal, CancellationToken cancellationToken)
     {
         var userId = claimsPrincipal.GetUserId();
 
@@ -26,10 +26,10 @@ public class FollowUser : IEndpoint
             return new ValidationError("You cannot follow yourself.");
         }
 
-        var isAlreadyFollowing = await db.Follows.AnyAsync(x => 
+        var isAlreadyFollowing = await database.Follows.AnyAsync(x => 
             x.FollowerUserId == userId && 
             x.FollowedUserId == request.Id,
-            ct
+            cancellationToken
         );
 
         if (isAlreadyFollowing)
@@ -45,8 +45,8 @@ public class FollowUser : IEndpoint
 
         // TODO: Send a notification to the user being followed
 
-        await db.Follows.AddAsync(follow, ct);
-        await db.SaveChangesAsync(ct);
+        await database.Follows.AddAsync(follow, cancellationToken);
+        await database.SaveChangesAsync(cancellationToken);
         return TypedResults.Ok();
     }
 }

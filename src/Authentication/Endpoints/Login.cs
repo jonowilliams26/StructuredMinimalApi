@@ -20,9 +20,9 @@ public class Login : IEndpoint
         }
     }
 
-    private static async Task<Results<Ok<Response>, UnauthorizedHttpResult>> Handle(Request request, AppDbContext db, Jwt jwt, CancellationToken ct)
+    private static async Task<Results<Ok<Response>, UnauthorizedHttpResult>> Handle(Request request, AppDbContext database, Jwt jwt, CancellationToken cancellationToken)
     {
-        var user = await db.Users.SingleOrDefaultAsync(x => x.Username == request.Username && x.Password == request.Password, ct);
+        var user = await database.Users.SingleOrDefaultAsync(x => x.Username == request.Username && x.Password == request.Password, cancellationToken);
 
         if (user is null || user.Password != request.Password)
         {
