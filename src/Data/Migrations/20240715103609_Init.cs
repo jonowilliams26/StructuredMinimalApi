@@ -17,7 +17,8 @@ namespace Chirper.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReferenceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -56,6 +57,7 @@ namespace Chirper.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ReferenceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false),
@@ -78,6 +80,7 @@ namespace Chirper.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ReferenceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PostId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -162,6 +165,12 @@ namespace Chirper.Data.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_ReferenceId",
+                table: "Comments",
+                column: "ReferenceId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_ReplyToCommentId",
                 table: "Comments",
                 column: "ReplyToCommentId");
@@ -182,9 +191,27 @@ namespace Chirper.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Posts_ReferenceId",
+                table: "Posts",
+                column: "ReferenceId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Posts_UserId",
                 table: "Posts",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ReferenceId",
+                table: "Users",
+                column: "ReferenceId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username",
+                table: "Users",
+                column: "Username",
+                unique: true);
         }
 
         /// <inheritdoc />

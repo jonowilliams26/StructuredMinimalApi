@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirper.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240714054511_Init")]
+    [Migration("20240715103609_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -43,6 +43,9 @@ namespace Chirper.Data.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("ReferenceId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int?>("ReplyToCommentId")
                         .HasColumnType("int");
 
@@ -55,6 +58,9 @@ namespace Chirper.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("ReferenceId")
+                        .IsUnique();
 
                     b.HasIndex("ReplyToCommentId");
 
@@ -113,6 +119,9 @@ namespace Chirper.Data.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("ReferenceId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -125,6 +134,9 @@ namespace Chirper.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReferenceId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -168,11 +180,20 @@ namespace Chirper.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("ReferenceId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReferenceId")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
