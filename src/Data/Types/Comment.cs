@@ -3,6 +3,7 @@
 public class Comment : IEntity, IOwnedEntity
 {
     public int Id { get; private set; }
+    public Guid ReferenceId { get; private init; } = Guid.NewGuid();
     public required int PostId { get; init; }
     public Post Post { get; init; } = null!;
     public required int UserId { get; init; }

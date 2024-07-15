@@ -23,6 +23,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     private static void ConfigureUsersTable(ModelBuilder modelBuilder)
     {
         var builder = modelBuilder.Entity<User>();
+
+        builder.HasIndex(x => x.Username)
+            .IsUnique();
+
+        builder.HasIndex(x => x.ReferenceId)
+            .IsUnique();
         
         builder.HasMany(x => x.Posts)
             .WithOne(x => x.User)
@@ -59,6 +65,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     {
         var builder = modelBuilder.Entity<Post>();
 
+        builder.HasIndex(x => x.ReferenceId)
+            .IsUnique();
+
         builder.Property(x => x.Title)
             .HasMaxLength(100);
 
@@ -76,6 +85,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     private static void ConfigureCommentsTable(ModelBuilder modelBuilder)
     {
         var builder = modelBuilder.Entity<Comment>();
+
+        builder.HasIndex(x => x.ReferenceId)
+            .IsUnique();
 
         builder.HasMany(x => x.Likes)
             .WithOne(x => x.Comment)
